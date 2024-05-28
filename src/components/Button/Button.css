@@ -1,0 +1,40 @@
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: center;
+    cursor: pointer;
+    border: none;
+    background: #333333;
+    color: #FFFFFF;
+    font-weight: 500;
+    border-radius: 50%;
+    font-size: 32px;
+    height: 75px;
+    width: 75px;
+    transition: filter 0.3s ease-in;
+
+    &:active,
+    &:focus {
+        filter: brightness(120%);
+    }
+
+    &.zero {
+        grid-column: 1 / span 2;
+        width: calc(75px * 2 + 22px);
+        border-radius: 50px;
+        position: relative;
+        justify-content: flex-start;
+        padding-left: 30px;
+    }
+
+    &.function {
+        color: #000000;
+        background-color: #A5A5A5;
+    }
+
+    &.operator {
+        color: #FFFFFF;
+        background-color: #F2A33C;
+    }
+}
