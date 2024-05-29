@@ -11,7 +11,7 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({ value, onButtonClick, type }) => {
     return (
         <button
-        className={`button ${value === "0" ? "zero" : ""} ${type || ""}`}
+        className={`button ${value === "0" ? "zero" : ""} ${type || ""} ${value === "=" ? "equals" : ""}`}
         onClick={onButtonClick(value)}
         >
         {value}

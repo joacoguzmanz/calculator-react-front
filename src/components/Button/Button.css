@@ -36,5 +36,13 @@
     &.operator {
         color: #FFFFFF;
         background-color: #F2A33C;
+
+        &:not(.equals) {
+            &:active,
+            &:focus {
+                background-color: #FFFFFF!important;
+                color: #F2A33C!important;
+            }
+        }
     }
 }
