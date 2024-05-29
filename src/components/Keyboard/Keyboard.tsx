@@ -33,9 +33,9 @@ const keys: Keys[] = [
 ];
 
 const Keyboard: React.FC = () => {
-    const [firstNumber, setFirstNumber] = React.useState<number>(0)
+    const [firstNumber, setFirstNumber] = React.useState<string>('0')
     const [operator, setOperator] = React.useState<string>('')
-    const [secondNumber, setSecondNumber] = React.useState<number>(0)
+    const [secondNumber, setSecondNumber] = React.useState<string>('0')
 
     useEffect(() => {
         console.log('First number: ' + firstNumber);
@@ -43,15 +43,13 @@ const Keyboard: React.FC = () => {
     }, [firstNumber, secondNumber]);
 
     const handleButtonPress = (content: string) => async () => {
-        console.log(`Button "${content}" clicked`);
-
         // Implement button press logic here
         // Function buttons
         if (content === "AC") {
             console.log("Clear display");
-            setFirstNumber(0);
+            setFirstNumber('0');
             setOperator('');
-            setSecondNumber(0);
+            setSecondNumber('0');
         } else if (content === "+/-") {
             console.log("Toggle sign");
         } else if (content === "%") {
@@ -59,13 +57,48 @@ const Keyboard: React.FC = () => {
         }
 
         // Number buttons
-        if (!isNaN(Number(content)) || content === ",") {
+        /*if (!isNaN(Number(content)) || content === ",") {
             if (operator) {
                 setSecondNumber(prev => prev * 10 + Number(content));
             } else {
                 setFirstNumber(prev => prev * 10 + Number(content));
             }
-        }
+        }*/
+        if (!isNaN(Number(content))) {
+            if (operator) {
+                if (secondNumber.includes(',')) {
+                    setSecondNumber(prev => prev + content);
+                } else {
+                    setSecondNumber(prev => (Number(prev.replace(/,/g, '.')) * 10 + Number(content)).toString());
+                }
+            } else {
+                if (firstNumber.includes(',')) {
+                    setFirstNumber(prev => prev + content);
+                } else {
+                    setFirstNumber(prev => (Number(prev.replace(/,/g, '.')) * 10 + Number(content)).toString());
+                }
+            }
+        } else if (content === ",") {
+            if (operator) {
+                setSecondNumber(prev => prev.includes(',') ? prev : prev + content);
+            } else {
+                setFirstNumber(prev => prev.includes(',') ? prev : prev + content);
+            }
+}
+
+        /*if (!isNaN(Number(content))) {
+            if (operator) {
+                setSecondNumber(prev => (Number(prev.replace(/,/g, '.')) * 10 + Number(content)).toString());
+            } else {
+                setFirstNumber(prev => (Number(prev.replace(/,/g, '.')) * 10 + Number(content)).toString());
+            }
+        } else if (content === ",") {
+            if (operator) {
+                setSecondNumber(prev => prev.includes(',') ? prev : prev + content);
+            } else {
+                setFirstNumber(prev => prev.includes(',') ? prev : prev + content);
+            }
+        }*/
 
         // Operator buttons
         if (['+', '-', '*', '/'].includes(content)) {
@@ -91,9 +124,9 @@ const Keyboard: React.FC = () => {
                 .then(response => response.json())
                 .then(data => console.log(data))
 
-            setFirstNumber(0);
+            setFirstNumber('0');
             setOperator('');
-            setSecondNumber(0);
+            setSecondNumber('0');
         }
     };
 
