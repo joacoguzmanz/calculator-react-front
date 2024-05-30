@@ -46,18 +46,48 @@ const Keyboard: React.FC = () => {
     }, [firstNumber, secondNumber]);
 
     const handleButtonPress = (content: string) => async () => {
-        // Implement button press logic here
         // Function buttons
         if (content === "AC") {
-            console.log("Clear display");
             setFirstNumber('0');
             setOperator('');
             setSecondNumber('0');
             setDisplayValue('0');
-        } else if (content === "+/-") {
-            console.log("Toggle sign");
-        } else if (content === "%") {
-            console.log("Percentage");
+        }
+
+        if (content === "+/-") {
+            console.log('Hola');
+            fetch(`${API_URL}/calculateFunction`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    singleNumber: firstNumber,
+                    function: "opposite",
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setDisplayValue(data.toString())
+                })
+        }
+
+        if (content === "%") {
+            fetch(`${API_URL}/calculateFunction`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    singleNumber: firstNumber,
+                    function: "%",
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setDisplayValue(data.toString())
+                })
+            setFirstNumber('0');
         }
 
         // Number buttons
@@ -105,7 +135,7 @@ const Keyboard: React.FC = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    firstNumber: parseFloat(firstNumber),
+                    firstNumber: firstNumber,
                     operator: operator,
                     secondNumber: secondNumber,
                 }),

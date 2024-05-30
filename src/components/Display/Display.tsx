@@ -6,6 +6,7 @@ import { useDisplay } from "../../context/DisplayContext.tsx";
 // { value }: { value: string }
 const Display = () => {
     const { displayValue } = useDisplay();
+    console.log('Display value: ' + displayValue);
 
     return (
         <div className='display'>
