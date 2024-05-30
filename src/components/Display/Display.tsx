@@ -1,11 +1,17 @@
 import commafy from "../../utils/commafy.ts";
 
 import './Display.css';
+import { useDisplay } from "../../context/DisplayContext.tsx";
 
-const Display = ({ value }: { value: string }) => {
+// { value }: { value: string }
+const Display = () => {
+    const { displayValue } = useDisplay();
+
     return (
         <div className='display'>
-            <span>{commafy(value)}</span>
+            {displayValue === 'Error'
+                ? <span>Error</span>
+                : <span>{commafy(displayValue)}</span>}
         </div>
     );
 }
