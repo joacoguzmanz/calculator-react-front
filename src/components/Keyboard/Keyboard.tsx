@@ -95,6 +95,7 @@ const Keyboard: React.FC = () => {
         // Number buttons
         if (!isNaN(Number(content))) {
             if (operator) {
+                if (secondNumber.replace(',', '').length >= 8) return;
                 if (secondNumber.includes(',')) {
                     setSecondNumber(prev => prev + content);
                     setDisplayValue(secondNumber + content);
@@ -103,6 +104,7 @@ const Keyboard: React.FC = () => {
                     setDisplayValue(secondNumber + content);
                 }
             } else {
+                if (firstNumber.replace(',', '').length >= 8) return;
                 if (firstNumber.includes(',')) {
                     setFirstNumber(prev => prev + content);
                     setDisplayValue(firstNumber + content);
@@ -113,9 +115,11 @@ const Keyboard: React.FC = () => {
             }
         } else if (content === ",") {
             if (operator) {
+                if (secondNumber.replace(',', '').length >= 8) return;
                 setSecondNumber(prev => prev.includes(',') ? prev : prev + content);
                 setDisplayValue(secondNumber + content);
             } else {
+                if (firstNumber.replace(',', '').length >= 8) return;
                 setFirstNumber(prev => prev.includes(',') ? prev : prev + content);
                 setDisplayValue(firstNumber + content);
             }
