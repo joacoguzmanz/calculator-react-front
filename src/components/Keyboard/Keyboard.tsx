@@ -39,6 +39,7 @@ const Keyboard: React.FC = () => {
     const [firstNumber, setFirstNumber] = React.useState<string>('0')
     const [operator, setOperator] = React.useState<string>('')
     const [secondNumber, setSecondNumber] = React.useState<string>('0')
+    const [quasiResult, setQuasiResult] = React.useState<number>(0)
 
     useEffect(() => {
         console.log('First number: ' + firstNumber);
@@ -52,10 +53,10 @@ const Keyboard: React.FC = () => {
             setOperator('');
             setSecondNumber('0');
             setDisplayValue('0');
+            setQuasiResult(0);
         }
 
         if (content === "+/-") {
-            console.log('Hola');
             fetch(`${API_URL}/calculateFunction`, {
                 method: "POST",
                 headers: {
@@ -70,6 +71,7 @@ const Keyboard: React.FC = () => {
                 .then(data => {
                     setDisplayValue(data.toString())
                 })
+            setFirstNumber(firstNumber.includes('-') ? firstNumber.replace('-', '') : '-' + firstNumber);
         }
 
         if (content === "%") {
@@ -121,13 +123,41 @@ const Keyboard: React.FC = () => {
 
         // Operator buttons
         if (['+', '-', 'X', '÷'].includes(content)) {
+            if (firstNumber && operator && secondNumber) {
+                // Calculate the result of the current operation
+                let result = 0;
+                switch (operator) {
+                    case '+':
+                        result = Number(firstNumber.replace(',', '.')) + Number(secondNumber.replace(',', '.'));
+                        break;
+                    case '-':
+                        result = Number(firstNumber.replace(',', '.')) - Number(secondNumber.replace(',', '.'));
+                        break;
+                    case 'X':
+                        result = Number(firstNumber.replace(',', '.')) * Number(secondNumber.replace(',', '.'));
+                        break;
+                    case '÷':
+                        if (Number(secondNumber) === 0) {
+                            setDisplayValue('Error');
+                            return;
+                        } else {
+                            result = Number(firstNumber.replace(',', '.')) / Number(secondNumber.replace(',', '.'));
+                        }
+                        break;
+                }
+
+                // Display the result and set it as the first number for the next operation
+                setDisplayValue(result.toString());
+                setFirstNumber(result.toString());
+                setSecondNumber('0');
+            }
             setOperator(content);
-            console.log("Operator: " + content);
         }
 
         // Calculate
         if (content === "=") {
-            console.log('To calculate: ' + firstNumber + operator + secondNumber)
+            const firstNumberToSend = firstNumber.replace(',', '.');
+            const secondNumberToSend = secondNumber.replace(',', '.');
 
             fetch(`${API_URL}/calculate`, {
                 method: "POST",
@@ -135,9 +165,9 @@ const Keyboard: React.FC = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    firstNumber: firstNumber,
+                    firstNumber: firstNumberToSend,
                     operator: operator,
-                    secondNumber: secondNumber,
+                    secondNumber: secondNumberToSend,
                 }),
             })
                 .then(response => response.json())
@@ -146,6 +176,7 @@ const Keyboard: React.FC = () => {
                         setDisplayValue(data.error);
                     } else {
                         setDisplayValue(data.toString());
+                        setQuasiResult(data);
                     }
                 })
                 .catch(error => {
@@ -155,6 +186,12 @@ const Keyboard: React.FC = () => {
             setFirstNumber('0');
             setOperator('');
             setSecondNumber('0');
+            setQuasiResult(0);
+        }
+
+        if (quasiResult && content !== "=") {
+            setFirstNumber(quasiResult.toString());
+            setQuasiResult(0);
         }
     };
 

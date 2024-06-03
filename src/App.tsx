@@ -7,11 +7,7 @@ import Display from "./components/Display/Display.tsx";
 import { DisplayProvider } from "./context/DisplayContext.tsx";
 
 function App() {
-    // const [value, setValue] = useState("0");
-
-    // const value: string = "0";
-
-    return (
+        return (
         <div className='calculator'>
             <DisplayProvider>
                 <div className="top"></div>
