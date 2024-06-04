@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Button from "../Button/Button.tsx";
 
 import "./Keyboard.css";
@@ -40,11 +40,6 @@ const Keyboard: React.FC = () => {
     const [operator, setOperator] = React.useState<string>('')
     const [secondNumber, setSecondNumber] = React.useState<string>('0')
     const [quasiResult, setQuasiResult] = React.useState<number>(0)
-
-    useEffect(() => {
-        console.log('First number: ' + firstNumber);
-        console.log('Second number: ' + secondNumber);
-    }, [firstNumber, secondNumber]);
 
     const handleButtonPress = (content: string) => async () => {
         // Function buttons
